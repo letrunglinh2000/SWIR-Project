@@ -1,0 +1,40 @@
+{
+  "query_split": "test",
+  "reference_splits": [
+    "train"
+  ],
+  "n_query": 144,
+  "n_reference": 756,
+  "thresholds": {
+    "hamming": 5,
+    "mad": 0.02
+  },
+  "nn_hamming": {
+    "min": 2,
+    "p5": 7.0,
+    "median": 14.0,
+    "max": 21
+  },
+  "nn_mad": {
+    "min": 0.023359736427664757,
+    "p5": 0.038034168817102906,
+    "median": 0.07928676158189774,
+    "max": 0.14018157124519348
+  },
+  "n_flagged": 2,
+  "flagged": [
+    {
+      "query": "0714.png",
+      "nearest_reference": "0706.png",
+      "hamming": 2,
+      "mad": 0.023359736427664757
+    },
+    {
+      "query": "0715.png",
+      "nearest_reference": "0708.png",
+      "hamming": 4,
+      "mad": 0.041779644787311554
+    }
+  ],
+  "passed": false
+}

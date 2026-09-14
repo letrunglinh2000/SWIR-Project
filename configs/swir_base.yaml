@@ -1,0 +1,127 @@
+# SWIR-AdaIR-SR base configuration (spec v2.1).
+# Every numeric degradation parameter is a PROVISIONAL ENGINEERING DEFAULT,
+# not a measured sensor constant (spec preamble).
+
+experiment:
+  name: swir_adair_sr_base
+  seed: 1234
+  out_dir: runs/base
+
+data:
+  # Single-band PNG re-container of the shipped 3-component JPEGs
+  # (tools/to_single_channel.py). Pixel-identical to the luma band of the
+  # originals; datasets/NSLSR is kept for detection reproduction.
+  root: datasets/NSLSR_gray
+  modality: SWIR                 # LWIR is available but unused here (spec §9.1)
+  train_split: train        # manifest keys when splits_json is set
+  val_split: val
+  test_split: test
+  data_profile: configs/data_profile.yaml
+  # Leakage-aware manifest from tools/make_splits.py. The shipped folders are NOT
+  # an independent split: NSLSR_test is a strict subset of NSLSR_val and both
+  # stride the same capture sequence (see runs/leakage_audit.json). Set to null
+  # to fall back to the shipped folders for detection reproduction only.
+  splits_json: configs/splits.json
+  hr_patch: 256                  # spec §9.5: crop HR first, then degrade
+  augment: true
+  augment_ops: [hflip, vflip, rot90]
+  # A horizon-biased transmission field is not vertical-flip invariant (§9.6).
+  vflip_with_horizon_backscatter: false
+  cache_images: true
+
+scale_sampling:                  # spec §6.1 -- one optimizer batch = one scale
+  p_s1: 0.5
+  p_s2: 0.5
+  unit: batch
+
+model:
+  inp_channels: 1
+  out_channels: 1
+  dim: 48
+  num_blocks: [4, 6, 6, 8]
+  num_refinement_blocks: 4
+  heads: [1, 2, 4, 8]
+  ffn_expansion_factor: 2.66
+  bias: false
+  layernorm_type: WithBias
+  scales: [1, 2]
+  gated_base: true               # ablation A4
+  frequency_mask:
+    mode: soft_relative          # soft_relative (proposed) | upstream_integer (released) -- ablation A2
+    tau: 0.05
+  use_frequency_modules: true    # ablation A1
+
+train:
+  epochs: 300                    # spec §10.1: set from a convergence run, do not copy 180
+  warmup_epochs: 15
+  batch_size: 8
+  lr: 2.0e-4
+  weight_decay: 1.0e-4
+  optimizer: adamw               # released code uses AdamW; the paper reports Adam (§10.1)
+  grad_clip: 0.0
+  amp: false
+  num_workers: 8
+  val_every: 5
+  save_every: 25
+  init:
+    mode: pretrained_partial     # default arm (§10.1); ablation A5 = scratch
+    checkpoint: ''               # path to an AdaIR RGB checkpoint; '' => scratch
+    rgb_to_gray: mean            # W_gray = mean_c W_rgb
+    reinit_rate_conv: true       # Soft-FMiM changes mask semantics (§10.1)
+
+loss:
+  l1: 1.0                        # baseline: prove L1 convergence first (§10.2)
+  ssim: 0.0
+  edge: 0.0
+  freq:
+    mode: none                   # none | amplitude | complex_l1   (experimental slot, §10.2)
+    weight: 0.0
+
+eval:
+  metrics: [psnr, ssim, edge]
+  lpips:
+    enabled: false               # evaluation only, never a training loss
+    backbone: alex
+  # Frozen per-degradation validation subsets (§11.2)
+  fixed_subsets: [sr_only, noise, low_light, backscatter, blur, low_light_noise, composite]
+  val_images: 60                 # per subset during training; test uses the full split
+  val_full_frame: true           # training-time validation resolution (INV-7: always reported)
+  val_crop: 256                  # used when val_full_frame is false
+
+# ---------------------------------------------------------------------------
+# sim_A -- TRAINING simulator (spec §7.7). sim_B lives in configs/sim_b.yaml
+# and must differ in kernel family, noise mode and transmission model.
+# ---------------------------------------------------------------------------
+degradation:
+  name: sim_A
+  probabilities:
+    blur_p: 0.70
+    noise_p: 0.60
+    low_light_p: 0.45
+    backscatter_p: 0.35
+  illumination:
+    alpha_range: [0.15, 0.8]
+    gamma_range: [1.0, 2.2]
+  backscatter:
+    model: atmospheric_veiling   # physics-inspired, UNCALIBRATED (§7.3)
+    t_field: horizon
+    beta_range: [0.4, 1.8]
+    horizon_range: [0.25, 0.6]
+    horizon_sigma: 0.25
+    A_base_range: [0.5, 1.0]
+    exposure_coupling_kappa: [0.0, 1.0]
+  optics:
+    kernel_families: [iso, aniso]
+    kernel_size: 21
+    sigma_range: [0.2, 2.0]
+    downsample_interp: [area, bilinear, bicubic]
+  noise:
+    version: v2                  # Poisson-Gaussian + column/row/FPN structure
+    gain_range: [80.0, 2000.0]
+    read_sigma_range: [0.002, 0.02]
+    column_sigma_range: [0.002, 0.015]
+    row_sigma_range: [0.0005, 0.005]
+    fpn_sigma_range: [0.002, 0.012]
+  quantization:
+    mode: source                 # resolved from data_profile
+    bits: null

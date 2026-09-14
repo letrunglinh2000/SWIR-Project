@@ -1,0 +1,61 @@
+generated_by: tools/inspect_dataset.py (spec SS9.2)
+generated_at: '2026-09-14T19:54:01'
+root: datasets/NSLSR_gray
+modality: SWIR
+encoding:
+  dtype: uint8
+  bit_depth: 8
+  max_value: 255
+  channels: 1
+  channels_identical: true
+  worst_mean_channel_deviation: 0.0
+  worst_p999_channel_deviation: 0.0
+  worst_max_channel_deviation: 0.0
+  channel_rule: single
+  normalization: divide_by_255
+  note: Stored as a single band.
+splits:
+  NSLSR_train:
+    files_total: 803
+    files_inspected: 20
+    shapes:
+      (512, 640): 20
+    extensions:
+    - .png
+    pil_modes:
+    - L
+    intensity:
+      min: 0.0
+      median_of_medians: 139.5
+      max: 255.0
+  NSLSR_val:
+    files_total: 361
+    files_inspected: 20
+    shapes:
+      (512, 640): 20
+    extensions:
+    - .png
+    pil_modes:
+    - L
+    intensity:
+      min: 0.0
+      median_of_medians: 129.5
+      max: 255.0
+  NSLSR_test:
+    files_total: 118
+    files_inspected: 20
+    shapes:
+      (512, 640): 20
+    extensions:
+    - .png
+    pil_modes:
+    - L
+    intensity:
+      min: 0.0
+      median_of_medians: 119.0
+      max: 255.0
+splits_absent:
+- NSLSR320_val
+frames_total_excluding_320val: 1282
+spec_quoted_total: 1205
+total_matches_spec: false

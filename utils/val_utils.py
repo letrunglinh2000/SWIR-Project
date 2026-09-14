@@ -1,8 +1,15 @@
 
+import inspect
 import time
 import numpy as np
 from skimage.metrics import peak_signal_noise_ratio, structural_similarity
-from skvideo.measure import niqe
+
+# skvideo is only needed for the no-reference NIQE metric and is often absent;
+# importing it eagerly used to break every module that touches val_utils.
+try:
+    from skvideo.measure import niqe
+except ImportError:  # pragma: no cover
+    niqe = None
 
 
 class AverageMeter():
@@ -47,6 +54,23 @@ def accuracy(output, target, topk=(1,)):
     return res
 
 
+# skimage renamed `multichannel` to `channel_axis` in 0.19 and dropped the old
+# name in 0.23. Older versions absorb unknown kwargs into **kwargs and then fail
+# with a confusing "win_size exceeds image extent", so pick the name by
+# inspecting the signature rather than by catching an exception.
+if 'channel_axis' in inspect.signature(structural_similarity).parameters:
+    _SSIM_MULTICHANNEL = {'channel_axis': -1}
+else:
+    _SSIM_MULTICHANNEL = {'multichannel': True}
+
+
+def _ssim(clean, recoverd):
+    """SSIM for one HxWxC image, across skimage versions and channel counts."""
+    if clean.shape[-1] == 1:
+        return structural_similarity(clean[..., 0], recoverd[..., 0], data_range=1)
+    return structural_similarity(clean, recoverd, data_range=1, **_SSIM_MULTICHANNEL)
+
+
 def compute_psnr_ssim(recoverd, clean):
     assert recoverd.shape == clean.shape
     recoverd = np.clip(recoverd.detach().cpu().numpy(), 0, 1)
@@ -59,12 +83,14 @@ def compute_psnr_ssim(recoverd, clean):
 
     for i in range(recoverd.shape[0]):
         psnr += peak_signal_noise_ratio(clean[i], recoverd[i], data_range=1)
-        ssim += structural_similarity(clean[i], recoverd[i], data_range=1, multichannel=True)
+        ssim += _ssim(clean[i], recoverd[i])
 
     return psnr / recoverd.shape[0], ssim / recoverd.shape[0], recoverd.shape[0]
 
 
 def compute_niqe(image):
+    if niqe is None:
+        raise ImportError('compute_niqe requires scikit-video (pip install scikit-video)')
     image = np.clip(image.detach().cpu().numpy(), 0, 1)
     image = image.transpose(0, 2, 3, 1)
     niqe_val = niqe(image)

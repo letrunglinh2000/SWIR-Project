@@ -1,0 +1,232 @@
+{
+  "query_split": "NSLSR_test",
+  "reference_splits": [
+    "NSLSR_train"
+  ],
+  "n_query": 118,
+  "n_reference": 803,
+  "thresholds": {
+    "hamming": 5,
+    "mad": 0.02
+  },
+  "nn_hamming": {
+    "min": 0,
+    "p5": 2.0,
+    "median": 8.5,
+    "max": 21
+  },
+  "nn_mad": {
+    "min": 0.0056020887568593025,
+    "p5": 0.013340476714074612,
+    "median": 0.038620926439762115,
+    "max": 0.11551538109779358
+  },
+  "n_flagged": 34,
+  "flagged": [
+    {
+      "query": "0000.jpg",
+      "nearest_reference": "0001.jpg",
+      "hamming": 3,
+      "mad": 0.04275050759315491
+    },
+    {
+      "query": "0010.jpg",
+      "nearest_reference": "0011.jpg",
+      "hamming": 0,
+      "mad": 0.008606649935245514
+    },
+    {
+      "query": "0160.jpg",
+      "nearest_reference": "0159.jpg",
+      "hamming": 4,
+      "mad": 0.03915867581963539
+    },
+    {
+      "query": "0230.jpg",
+      "nearest_reference": "0229.jpg",
+      "hamming": 6,
+      "mad": 0.0056020887568593025
+    },
+    {
+      "query": "0240.jpg",
+      "nearest_reference": "0239.jpg",
+      "hamming": 17,
+      "mad": 0.00958060659468174
+    },
+    {
+      "query": "0250.jpg",
+      "nearest_reference": "0249.jpg",
+      "hamming": 18,
+      "mad": 0.019948020577430725
+    },
+    {
+      "query": "0300.jpg",
+      "nearest_reference": "0302.jpg",
+      "hamming": 5,
+      "mad": 0.037098467350006104
+    },
+    {
+      "query": "0340.jpg",
+      "nearest_reference": "0341.jpg",
+      "hamming": 4,
+      "mad": 0.02675127610564232
+    },
+    {
+      "query": "0400.jpg",
+      "nearest_reference": "0399.jpg",
+      "hamming": 0,
+      "mad": 0.018114350736141205
+    },
+    {
+      "query": "0440.jpg",
+      "nearest_reference": "0442.jpg",
+      "hamming": 2,
+      "mad": 0.023554354906082153
+    },
+    {
+      "query": "0450.jpg",
+      "nearest_reference": "0449.jpg",
+      "hamming": 5,
+      "mad": 0.03413109481334686
+    },
+    {
+      "query": "0460.jpg",
+      "nearest_reference": "0461.jpg",
+      "hamming": 2,
+      "mad": 0.011877672746777534
+    },
+    {
+      "query": "0470.jpg",
+      "nearest_reference": "0471.jpg",
+      "hamming": 2,
+      "mad": 0.024200856685638428
+    },
+    {
+      "query": "0480.jpg",
+      "nearest_reference": "0481.jpg",
+      "hamming": 4,
+      "mad": 0.03426750749349594
+    },
+    {
+      "query": "0490.jpg",
+      "nearest_reference": "0489.jpg",
+      "hamming": 2,
+      "mad": 0.030796173959970474
+    },
+    {
+      "query": "0500.jpg",
+      "nearest_reference": "0499.jpg",
+      "hamming": 2,
+      "mad": 0.016479119658470154
+    },
+    {
+      "query": "0510.jpg",
+      "nearest_reference": "0509.jpg",
+      "hamming": 3,
+      "mad": 0.02442128211259842
+    },
+    {
+      "query": "0520.jpg",
+      "nearest_reference": "0521.jpg",
+      "hamming": 2,
+      "mad": 0.03189690411090851
+    },
+    {
+      "query": "0550.jpg",
+      "nearest_reference": "0549.jpg",
+      "hamming": 2,
+      "mad": 0.034569140523672104
+    },
+    {
+      "query": "0600.jpg",
+      "nearest_reference": "0599.jpg",
+      "hamming": 2,
+      "mad": 0.01767536625266075
+    },
+    {
+      "query": "0620.jpg",
+      "nearest_reference": "0621.jpg",
+      "hamming": 2,
+      "mad": 0.025907937437295914
+    },
+    {
+      "query": "0660.jpg",
+      "nearest_reference": "0664.jpg",
+      "hamming": 4,
+      "mad": 0.03891460597515106
+    },
+    {
+      "query": "0670.jpg",
+      "nearest_reference": "0671.jpg",
+      "hamming": 2,
+      "mad": 0.023613644763827324
+    },
+    {
+      "query": "0690.jpg",
+      "nearest_reference": "0691.jpg",
+      "hamming": 4,
+      "mad": 0.031682826578617096
+    },
+    {
+      "query": "0750.jpg",
+      "nearest_reference": "0748.jpg",
+      "hamming": 3,
+      "mad": 0.06907957792282104
+    },
+    {
+      "query": "0884.jpg",
+      "nearest_reference": "0885.jpg",
+      "hamming": 4,
+      "mad": 0.021846937015652657
+    },
+    {
+      "query": "0910.jpg",
+      "nearest_reference": "0911.jpg",
+      "hamming": 5,
+      "mad": 0.016038842499256134
+    },
+    {
+      "query": "0930.jpg",
+      "nearest_reference": "0929.jpg",
+      "hamming": 7,
+      "mad": 0.01749078556895256
+    },
+    {
+      "query": "1070.jpg",
+      "nearest_reference": "1068.jpg",
+      "hamming": 3,
+      "mad": 0.012944674119353294
+    },
+    {
+      "query": "1080.jpg",
+      "nearest_reference": "1081.jpg",
+      "hamming": 5,
+      "mad": 0.024799317121505737
+    },
+    {
+      "query": "1130.jpg",
+      "nearest_reference": "1133.jpg",
+      "hamming": 13,
+      "mad": 0.013410324230790138
+    },
+    {
+      "query": "1160.jpg",
+      "nearest_reference": "1159.jpg",
+      "hamming": 0,
+      "mad": 0.018559275195002556
+    },
+    {
+      "query": "1170.jpg",
+      "nearest_reference": "1171.jpg",
+      "hamming": 6,
+      "mad": 0.011546631343662739
+    },
+    {
+      "query": "1200.jpg",
+      "nearest_reference": "1058.jpg",
+      "hamming": 5,
+      "mad": 0.016911230981349945
+    }
+  ],
+  "passed": false
+}

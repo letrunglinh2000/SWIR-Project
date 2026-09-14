@@ -1,0 +1,54 @@
+{
+  "device": "NVIDIA A100 80GB PCIe",
+  "torch": "2.6.0+cu124",
+  "params_M": 28.757148,
+  "trainable_M": 28.757148,
+  "runs": 100,
+  "warmup": 10,
+  "contention": {
+    "gpu_status": [
+      "94 %, 67529 MiB, 81920 MiB",
+      "95 %, 67529 MiB, 81920 MiB",
+      "99 %, 68066 MiB, 81920 MiB",
+      "96 %, 67529 MiB, 81920 MiB"
+    ],
+    "n_compute_processes": 5,
+    "exclusive": false,
+    "warning": "GPU SHARED with 4 other process(es): ms/frame is NOT a valid deployment latency. Re-run on an idle GPU."
+  },
+  "note": "MACs are meaningless without the input size; always quote both.",
+  "measurements": [
+    {
+      "h": 256,
+      "w": 320,
+      "scale": 1,
+      "gmacs": 183.702596004,
+      "ms_per_frame": 233.75547943636775,
+      "peak_mib": 774.97705078125
+    },
+    {
+      "h": 256,
+      "w": 320,
+      "scale": 2,
+      "gmacs": 183.914932644,
+      "ms_per_frame": 239.60351421497762,
+      "peak_mib": 774.97705078125
+    },
+    {
+      "h": 512,
+      "w": 640,
+      "scale": 1,
+      "gmacs": 734.810156964,
+      "ms_per_frame": 913.510725852102,
+      "peak_mib": 2733.3916015625
+    },
+    {
+      "h": 512,
+      "w": 640,
+      "scale": 2,
+      "gmacs": 735.659503524,
+      "ms_per_frame": 914.0294024720788,
+      "peak_mib": 2733.3916015625
+    }
+  ]
+}
